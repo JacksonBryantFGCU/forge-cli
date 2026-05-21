@@ -1,24 +1,24 @@
 {
   "id": "react-router-baseline",
   "name": "React Router baseline",
-  "description": "Wire BrowserRouter into a Vite + React app with a Home/About route pair.",
-  "tags": ["react", "react-router", "vite", "routing"],
-  "notes": "Install: npm i react-router-dom. Import the App from src/App.tsx in main.tsx as usual.",
+  "description": "Modular AppRouter component plus Home and NotFound pages — wire into main.tsx with <AppRouter />.",
+  "tags": ["react", "react-router", "routing", "vite"],
+  "notes": "Install: npm i react-router-dom. Replace your <App /> render in main.tsx with <AppRouter />, or import AppRouter inside your existing App component. A catch-all route renders the NotFound page so refresh-on-deep-link works once you also apply vite-vercel-client-routing.",
   "files": [
     {
-      "path": "src/App.tsx",
-      "operation": "overwrite",
-      "content": "import { BrowserRouter, Link, Route, Routes } from \"react-router-dom\";\nimport { Home } from \"./pages/Home.js\";\nimport { About } from \"./pages/About.js\";\n\nexport function App() {\n  return (\n    <BrowserRouter>\n      <nav className=\"flex gap-4 border-b border-slate-200 px-4 py-3 text-sm\">\n        <Link to=\"/\">Home</Link>\n        <Link to=\"/about\">About</Link>\n      </nav>\n      <Routes>\n        <Route path=\"/\" element={<Home />} />\n        <Route path=\"/about\" element={<About />} />\n      </Routes>\n    </BrowserRouter>\n  );\n}\n"
+      "path": "src/router/AppRouter.tsx",
+      "operation": "create",
+      "content": "import { BrowserRouter, Route, Routes } from \"react-router-dom\";\nimport { Home } from \"../pages/Home.js\";\nimport { NotFound } from \"../pages/NotFound.js\";\n\nexport function AppRouter() {\n  return (\n    <BrowserRouter>\n      <Routes>\n        <Route path=\"/\" element={<Home />} />\n        <Route path=\"*\" element={<NotFound />} />\n      </Routes>\n    </BrowserRouter>\n  );\n}\n"
     },
     {
       "path": "src/pages/Home.tsx",
       "operation": "create",
-      "content": "export function Home() {\n  return (\n    <main className=\"mx-auto max-w-3xl px-4 py-8\">\n      <h1 className=\"text-2xl font-semibold\">Home</h1>\n      <p className=\"mt-2 text-sm text-slate-600\">Replace this with real home content.</p>\n    </main>\n  );\n}\n"
+      "content": "export function Home() {\n  return (\n    <main className=\"mx-auto max-w-3xl px-4 py-12\">\n      <h1 className=\"text-3xl font-semibold tracking-tight\">Home</h1>\n      <p className=\"mt-2 text-slate-600\">\n        Replace this with the real home page content.\n      </p>\n    </main>\n  );\n}\n"
     },
     {
-      "path": "src/pages/About.tsx",
+      "path": "src/pages/NotFound.tsx",
       "operation": "create",
-      "content": "export function About() {\n  return (\n    <main className=\"mx-auto max-w-3xl px-4 py-8\">\n      <h1 className=\"text-2xl font-semibold\">About</h1>\n      <p className=\"mt-2 text-sm text-slate-600\">Tell visitors who you are here.</p>\n    </main>\n  );\n}\n"
+      "content": "import { Link } from \"react-router-dom\";\n\nexport function NotFound() {\n  return (\n    <main className=\"mx-auto max-w-3xl px-4 py-12 text-center\">\n      <p className=\"text-sm font-medium uppercase tracking-wide text-slate-500\">\n        404\n      </p>\n      <h1 className=\"mt-2 text-3xl font-semibold tracking-tight\">\n        Page not found\n      </h1>\n      <p className=\"mt-3 text-slate-600\">\n        The page you're looking for doesn't exist or has moved.\n      </p>\n      <Link\n        to=\"/\"\n        className=\"mt-6 inline-flex items-center justify-center rounded bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800\"\n      >\n        Back to home\n      </Link>\n    </main>\n  );\n}\n"
     }
   ]
 }

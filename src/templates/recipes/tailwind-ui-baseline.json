@@ -1,0 +1,24 @@
+{
+  "id": "tailwind-ui-baseline",
+  "name": "Tailwind UI baseline (Container, Button, Card)",
+  "description": "Three accessible, opinion-free Tailwind components: Container, Button, Card. Drop into src/components/ui/.",
+  "tags": ["tailwind", "react", "ui", "components"],
+  "notes": "Requires Tailwind v3+ already configured. The components rely on semantic elements and visible focus rings — keep that behavior intact if you customize them.",
+  "files": [
+    {
+      "path": "src/components/ui/Container.tsx",
+      "operation": "create",
+      "content": "import type { ReactNode } from \"react\";\n\nexport function Container({\n  children,\n  className,\n}: {\n  children: ReactNode;\n  className?: string;\n}) {\n  return (\n    <div\n      className={[\n        \"mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8\",\n        className ?? \"\",\n      ]\n        .filter(Boolean)\n        .join(\" \")}\n    >\n      {children}\n    </div>\n  );\n}\n"
+    },
+    {
+      "path": "src/components/ui/Button.tsx",
+      "operation": "create",
+      "content": "import type { ButtonHTMLAttributes, ReactNode } from \"react\";\n\ntype Variant = \"primary\" | \"secondary\" | \"ghost\";\ntype Size = \"sm\" | \"md\" | \"lg\";\n\nconst BASE =\n  \"inline-flex items-center justify-center rounded font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed\";\n\nconst VARIANTS: Record<Variant, string> = {\n  primary: \"bg-blue-600 text-white hover:bg-blue-700\",\n  secondary: \"bg-slate-200 text-slate-900 hover:bg-slate-300\",\n  ghost: \"bg-transparent text-slate-700 hover:bg-slate-100\",\n};\n\nconst SIZES: Record<Size, string> = {\n  sm: \"px-3 py-1.5 text-sm\",\n  md: \"px-4 py-2 text-sm\",\n  lg: \"px-5 py-2.5 text-base\",\n};\n\nexport type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {\n  variant?: Variant;\n  size?: Size;\n  children: ReactNode;\n};\n\nexport function Button({\n  variant = \"primary\",\n  size = \"md\",\n  className,\n  children,\n  type = \"button\",\n  ...rest\n}: ButtonProps) {\n  return (\n    <button\n      type={type}\n      className={[BASE, VARIANTS[variant], SIZES[size], className ?? \"\"]\n        .filter(Boolean)\n        .join(\" \")}\n      {...rest}\n    >\n      {children}\n    </button>\n  );\n}\n"
+    },
+    {
+      "path": "src/components/ui/Card.tsx",
+      "operation": "create",
+      "content": "import type { ReactNode } from \"react\";\n\nexport function Card({\n  children,\n  className,\n}: {\n  children: ReactNode;\n  className?: string;\n}) {\n  return (\n    <article\n      className={[\n        \"rounded-lg border border-slate-200 bg-white p-4 shadow-sm\",\n        className ?? \"\",\n      ]\n        .filter(Boolean)\n        .join(\" \")}\n    >\n      {children}\n    </article>\n  );\n}\n\nexport function CardHeader({ children }: { children: ReactNode }) {\n  return <header className=\"mb-2 flex items-center justify-between\">{children}</header>;\n}\n\nexport function CardTitle({ children }: { children: ReactNode }) {\n  return <h3 className=\"text-base font-semibold tracking-tight\">{children}</h3>;\n}\n\nexport function CardBody({ children }: { children: ReactNode }) {\n  return <div className=\"text-sm text-slate-600\">{children}</div>;\n}\n"
+    }
+  ]
+}

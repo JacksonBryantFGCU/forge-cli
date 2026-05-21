@@ -1,8 +1,12 @@
 import { Args, Command, Flags } from "@oclif/core";
 import {
+  appendToHistory,
+  generateId,
   generatePrompt,
   PROMPT_TYPES,
+  resolvePromptMode,
 } from "../../modules/promptkit/index.js";
+import type { PromptHistoryEntry } from "../../modules/promptkit/index.js";
 
 export default class Prompt extends Command {
   static override description =
@@ -18,6 +22,7 @@ export default class Prompt extends Command {
     'forge prompt deploy "ship to Vercel" --mode plan',
     'forge prompt test "cover the checkout flow"',
     'forge prompt feature "add settings page" --copy',
+    'forge prompt feature "add auth" --no-save',
   ];
 
   static override args = {
@@ -43,19 +48,40 @@ export default class Prompt extends Command {
         "Copy the prompt to the clipboard if clipboardy is installed.",
       default: false,
     }),
+    save: Flags.boolean({
+      description: "Save the generated prompt to history (use --no-save to skip).",
+      default: true,
+      allowNo: true,
+    }),
   };
 
   async run(): Promise<void> {
     const { args, flags } = await this.parse(Prompt);
 
+    const cwd = process.cwd();
+    const resolvedMode = await resolvePromptMode(flags.mode);
+
     const prompt = await generatePrompt({
-      cwd: process.cwd(),
+      cwd,
       type: args.type,
       task: args.task,
-      mode: flags.mode,
+      mode: resolvedMode,
     });
 
     this.log(prompt);
+
+    if (flags.save) {
+      const entry: PromptHistoryEntry = {
+        id: generateId(),
+        timestamp: new Date().toISOString(),
+        type: args.type as PromptHistoryEntry["type"],
+        mode: resolvedMode,
+        task: args.task,
+        projectRoot: cwd,
+        prompt,
+      };
+      await appendToHistory(entry);
+    }
 
     if (flags.copy) {
       const copied = await tryCopyToClipboard(prompt);

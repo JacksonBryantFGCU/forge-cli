@@ -23,12 +23,19 @@ async function directoryExists(dirPath) {
     return false;
   }
 }
+async function ensureDir(dirPath) {
+  await fs.mkdir(dirPath, { recursive: true });
+}
 async function readTextFile(filePath) {
   try {
     return await fs.readFile(filePath, "utf8");
   } catch {
     return null;
   }
+}
+async function writeTextFile(filePath, content) {
+  await ensureDir(path.dirname(filePath));
+  await fs.writeFile(filePath, content, "utf8");
 }
 async function readJsonFile(filePath) {
   const raw = await readTextFile(filePath);
@@ -40,6 +47,10 @@ async function readJsonFile(filePath) {
   } catch {
     return null;
   }
+}
+async function writeJsonFile(filePath, data) {
+  await writeTextFile(filePath, `${JSON.stringify(data, null, 2)}
+`);
 }
 
 // src/core/package-manager.ts
@@ -782,6 +793,51 @@ function aggregateStatus(checks, strict) {
   return "pass";
 }
 
+// src/modules/launchcheck/reports.ts
+import fs4 from "fs/promises";
+import os from "os";
+import path9 from "path";
+function safeProjectName(name) {
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return slug || "unnamed";
+}
+async function resolveProjectName(cwd, explicit) {
+  if (explicit) {
+    return safeProjectName(explicit);
+  }
+  const raw = await readJsonFile(
+    path9.join(cwd, "package.json")
+  );
+  if (raw?.name) {
+    return safeProjectName(raw.name);
+  }
+  return safeProjectName(path9.basename(cwd));
+}
+function getReportsBaseDir() {
+  return path9.join(os.homedir(), ".forge", "reports");
+}
+function getReportsDir(projectName) {
+  return path9.join(getReportsBaseDir(), projectName);
+}
+function timestampToFilename(ts) {
+  return ts.replace(/:/g, "-").replace(/\./g, "-");
+}
+async function saveReport(result, opts) {
+  const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+  const report = {
+    ...result,
+    project: opts.project,
+    cwd: result.projectRoot,
+    timestamp,
+    ...opts.url !== void 0 ? { url: opts.url } : {}
+  };
+  const dir = getReportsDir(opts.project);
+  await ensureDir(dir);
+  const filePath = path9.join(dir, `${timestampToFilename(timestamp)}.json`);
+  await writeJsonFile(filePath, report);
+  return filePath;
+}
+
 // src/commands/launch/index.ts
 var Launch = class _Launch extends Command {
   static description = "Run a practical pre-launch checklist for React/Vite/Vercel client sites.";
@@ -813,6 +869,13 @@ var Launch = class _Launch extends Command {
     strict: Flags.boolean({
       description: "Treat warnings as launch blockers in the overall score and status.",
       default: false
+    }),
+    save: Flags.boolean({
+      description: "Save the result to ~/.forge/reports/<project>/<timestamp>.json.",
+      default: false
+    }),
+    project: Flags.string({
+      description: "Project name used when saving reports (defaults to package.json name or directory name)."
     })
   };
   async run() {
@@ -850,6 +913,18 @@ var Launch = class _Launch extends Command {
     this.log(
       `${counts.pass} passed, ${counts.warn} warning(s), ${counts.fail} failing.`
     );
+    if (flags.save) {
+      const projectName = await resolveProjectName(
+        process.cwd(),
+        flags.project
+      );
+      const savedPath = await saveReport(result, {
+        project: projectName,
+        url: flags.url
+      });
+      this.log(`
+Report saved: ${savedPath}`);
+    }
   }
 };
 export {

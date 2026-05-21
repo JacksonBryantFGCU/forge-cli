@@ -1,5 +1,9 @@
 import { Command, Flags } from "@oclif/core";
 import { runLaunchCheck } from "../../modules/launchcheck/index.js";
+import {
+  resolveProjectName,
+  saveReport,
+} from "../../modules/launchcheck/reports.js";
 
 export default class Launch extends Command {
   static override description =
@@ -37,6 +41,15 @@ export default class Launch extends Command {
       description:
         "Treat warnings as launch blockers in the overall score and status.",
       default: false,
+    }),
+    save: Flags.boolean({
+      description:
+        "Save the result to ~/.forge/reports/<project>/<timestamp>.json.",
+      default: false,
+    }),
+    project: Flags.string({
+      description:
+        "Project name used when saving reports (defaults to package.json name or directory name).",
     }),
   };
 
@@ -83,5 +96,17 @@ export default class Launch extends Command {
     this.log(
       `${counts.pass} passed, ${counts.warn} warning(s), ${counts.fail} failing.`,
     );
+
+    if (flags.save) {
+      const projectName = await resolveProjectName(
+        process.cwd(),
+        flags.project,
+      );
+      const savedPath = await saveReport(result, {
+        project: projectName,
+        url: flags.url,
+      });
+      this.log(`\nReport saved: ${savedPath}`);
+    }
   }
 }

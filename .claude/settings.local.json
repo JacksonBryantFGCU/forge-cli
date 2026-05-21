@@ -19,7 +19,9 @@
       "Bash(rm -rf forge-render-test)",
       "Bash(echo \"EXIT: $?\")",
       "Read(//c//**)",
-      "Bash(rm -rf /tmp/forge-cfg)"
+      "Bash(rm -rf /tmp/forge-cfg)",
+      "Bash(Get-ChildItem -Force)",
+      "Bash(Select-Object Name, PSIsContainer)"
     ]
   }
 }

@@ -1,0 +1,14 @@
+{
+  "id": "github-actions-vite-deploy-check",
+  "name": "GitHub Actions: deploy preflight",
+  "description": "CI workflow that installs deps, typechecks, runs tests (if present), and builds — the four checks you want green before deploying a Vite site.",
+  "tags": ["ci", "github-actions", "vite", "deploy"],
+  "notes": "Drop-in CI workflow. `--if-present` lets the typecheck and test steps no-op when those scripts aren't defined yet. Adjust the Node version pin if your project requires something other than 20.",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "operation": "create",
+      "content": "name: CI\n\non:\n  push:\n    branches: [main]\n  pull_request:\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 20\n          cache: npm\n      - run: npm ci\n      - run: npm run typecheck --if-present\n      - run: npm test --if-present -- --run\n      - run: npm run build\n"
+    }
+  ]
+}

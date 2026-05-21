@@ -1,0 +1,24 @@
+{
+  "id": "client-contact-form",
+  "name": "Client contact form",
+  "description": "Accessible ContactForm component plus a small fetch wrapper that posts to a configurable endpoint.",
+  "tags": ["react", "client-site", "forms", "contact"],
+  "notes": "Set VITE_CONTACT_ENDPOINT to your form handler (e.g. a Vercel serverless function, Formspree, or your own API). The form falls back to console.log when the env var is missing so dev still works without a backend.",
+  "files": [
+    {
+      "path": "src/components/forms/ContactForm.tsx",
+      "operation": "create",
+      "content": "import { useState } from \"react\";\nimport { submitContactMessage } from \"../../lib/contact.js\";\n\ntype Status = \"idle\" | \"sending\" | \"sent\" | \"error\";\n\nexport function ContactForm() {\n  const [status, setStatus] = useState<Status>(\"idle\");\n  const [error, setError] = useState<string | null>(null);\n\n  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    setStatus(\"sending\");\n    setError(null);\n\n    const form = event.currentTarget;\n    const data = new FormData(form);\n    const payload = {\n      name: String(data.get(\"name\") ?? \"\"),\n      email: String(data.get(\"email\") ?? \"\"),\n      message: String(data.get(\"message\") ?? \"\"),\n    };\n\n    try {\n      await submitContactMessage(payload);\n      setStatus(\"sent\");\n      form.reset();\n    } catch (err) {\n      setStatus(\"error\");\n      setError(err instanceof Error ? err.message : \"Failed to send message.\");\n    }\n  }\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      className=\"flex flex-col gap-4 max-w-lg\"\n      aria-describedby={error ? \"contact-error\" : undefined}\n    >\n      <label className=\"flex flex-col gap-1 text-sm\">\n        <span className=\"font-medium\">Name</span>\n        <input\n          name=\"name\"\n          type=\"text\"\n          required\n          autoComplete=\"name\"\n          className=\"rounded border border-gray-300 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500\"\n        />\n      </label>\n      <label className=\"flex flex-col gap-1 text-sm\">\n        <span className=\"font-medium\">Email</span>\n        <input\n          name=\"email\"\n          type=\"email\"\n          required\n          autoComplete=\"email\"\n          className=\"rounded border border-gray-300 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500\"\n        />\n      </label>\n      <label className=\"flex flex-col gap-1 text-sm\">\n        <span className=\"font-medium\">Message</span>\n        <textarea\n          name=\"message\"\n          rows={4}\n          required\n          className=\"rounded border border-gray-300 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500\"\n        />\n      </label>\n      {error && (\n        <p id=\"contact-error\" role=\"alert\" className=\"text-sm text-red-600\">\n          {error}\n        </p>\n      )}\n      {status === \"sent\" && (\n        <p role=\"status\" className=\"text-sm text-green-700\">\n          Thanks — we'll be in touch soon.\n        </p>\n      )}\n      <button\n        type=\"submit\"\n        disabled={status === \"sending\"}\n        className=\"inline-flex items-center justify-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50\"\n      >\n        {status === \"sending\" ? \"Sending…\" : \"Send message\"}\n      </button>\n    </form>\n  );\n}\n"
+    },
+    {
+      "path": "src/lib/contact.ts",
+      "operation": "create",
+      "content": "export type ContactPayload = {\n  name: string;\n  email: string;\n  message: string;\n};\n\nexport async function submitContactMessage(\n  payload: ContactPayload,\n): Promise<void> {\n  const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT;\n\n  if (!endpoint) {\n    // Dev fallback: surface the payload so you can wire a real endpoint later.\n    console.warn(\n      \"VITE_CONTACT_ENDPOINT is not set — logging contact message instead.\",\n      payload,\n    );\n    return;\n  }\n\n  const response = await fetch(endpoint, {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(payload),\n  });\n\n  if (!response.ok) {\n    const text = await response.text();\n    throw new Error(\n      `Contact endpoint returned ${response.status}: ${text || \"no body\"}`,\n    );\n  }\n}\n"
+    },
+    {
+      "path": ".env.example",
+      "operation": "append",
+      "content": "\n# Endpoint for the contact form (Formspree, Vercel function, custom API, etc.)\nVITE_CONTACT_ENDPOINT=\n"
+    }
+  ]
+}

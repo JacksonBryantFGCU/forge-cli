@@ -4,12 +4,19 @@ import { RecipeSchema, type Recipe } from "./types.js";
 
 export const DEFAULT_RECIPE_IDS = [
   "vite-vercel-spa-rewrite",
+  "vite-vercel-client-routing",
   "express-secure-baseline",
+  "express-security-baseline",
   "supabase-client-react",
+  "supabase-auth-react",
+  "square-checkout-express",
   "github-actions-vite",
+  "github-actions-vite-deploy-check",
   "playwright-basic-config",
   "env-example-baseline",
   "react-router-baseline",
+  "tailwind-ui-baseline",
+  "client-contact-form",
 ] as const;
 
 export type DefaultRecipeId = (typeof DEFAULT_RECIPE_IDS)[number];

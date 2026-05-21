@@ -148,12 +148,19 @@ var PACK_ACTIONS = [
 // src/modules/stackpack/default-recipes.ts
 var DEFAULT_RECIPE_IDS = [
   "vite-vercel-spa-rewrite",
+  "vite-vercel-client-routing",
   "express-secure-baseline",
+  "express-security-baseline",
   "supabase-client-react",
+  "supabase-auth-react",
+  "square-checkout-express",
   "github-actions-vite",
+  "github-actions-vite-deploy-check",
   "playwright-basic-config",
   "env-example-baseline",
-  "react-router-baseline"
+  "react-router-baseline",
+  "tailwind-ui-baseline",
+  "client-contact-form"
 ];
 async function loadDefaultRecipes() {
   const recipes = [];
@@ -489,10 +496,18 @@ async function applyRecipeFile(input) {
   }
   if (file.operation === "append") {
     if (dryRun) {
-      return exists ? `Would append to ${file.path}` : `Would create ${file.path}`;
+      if (!exists) return `Would create ${file.path}`;
+      const existing = await readTextFile(targetPath) ?? "";
+      if (existing.includes(file.content.trim())) {
+        return `Would skip ${file.path} (content already present)`;
+      }
+      return `Would append to ${file.path}`;
     }
     if (exists) {
       const existing = await readTextFile(targetPath) ?? "";
+      if (existing.includes(file.content.trim())) {
+        return `Skipped ${file.path} (content already present)`;
+      }
       const separator = existing.endsWith("\n") || existing === "" ? "" : "\n";
       await writeTextFile(targetPath, `${existing}${separator}${file.content}`);
       return `Appended to ${file.path}`;

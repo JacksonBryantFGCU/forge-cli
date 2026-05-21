@@ -68,6 +68,12 @@ function isPromptMode(value: string): value is PromptMode {
   return value === "implement" || value === "review" || value === "plan";
 }
 
+export async function resolvePromptMode(
+  mode: string | undefined,
+): Promise<PromptMode> {
+  return resolveMode(mode);
+}
+
 async function resolveMode(mode: string | undefined): Promise<PromptMode> {
   if (mode && isPromptMode(mode)) {
     return mode;
@@ -96,5 +102,17 @@ function normalizeType(type: string): PromptType {
   return match;
 }
 
-export type { GeneratePromptOptions, PromptMode, PromptType } from "./types.js";
+export type {
+  GeneratePromptOptions,
+  PromptHistoryEntry,
+  PromptMode,
+  PromptType,
+} from "./types.js";
 export { PROMPT_TYPES } from "./types.js";
+export {
+  appendToHistory,
+  clearHistory,
+  findById,
+  generateId,
+  loadHistory,
+} from "./history.js";

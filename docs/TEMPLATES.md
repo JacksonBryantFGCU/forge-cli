@@ -59,6 +59,46 @@ something to edit. Subsequent calls just print the path.
   module passes a fixed set of variables (see the per-category tables below).
 - To go back to the bundled version, just delete the user file or folder.
 
+### Example: override a component template
+
+Replace the default `component.tsx.eta` with one that adds a `data-testid`
+attribute on every generated component:
+
+```bash
+forge template open components component.tsx.eta
+# prints: ~/.forge/templates/components/component.tsx.eta
+```
+
+Open that file and edit the JSX (Eta vars stay the same — `name`, `exportName`,
+`useMotion`, `hasTypes`, etc.):
+
+```eta
+<%= exportPrefix %> <%= exportName %>({ className }: <%= hasTypes ? name + "Props" : "{ className?: string }" %>) {
+  return (
+    <section data-testid="<%= name %>" className={["p-4", className].filter(Boolean).join(" ")}>
+      <h2 className="text-xl font-semibold"><%= name %></h2>
+    </section>
+  );
+}
+```
+
+Now every `forge component <Name>` writes the customized version. Run
+`forge template list` to confirm it shows up as `overridden`. Delete the user
+file to revert.
+
+### Example: override a prompt template
+
+Tighten the debug prompt's constraints for your workflow:
+
+```bash
+forge template open prompts debug.md.eta
+```
+
+Edit the constraints list inside the user copy — for example, add
+`- Always reproduce in a failing test before changing production code.` to the
+`## Constraints` block. The next `forge prompt debug "..."` invocation will
+render with your override.
+
 ## Eta basics
 
 Forge configures Eta with `useWith: true`, `autoEscape: false`, and

@@ -287,6 +287,27 @@ var PROMPT_TYPES = [
   "review"
 ];
 
+// src/modules/promptkit/history.ts
+import crypto from "crypto";
+import os3 from "os";
+import path6 from "path";
+function getHistoryPath() {
+  return path6.join(os3.homedir(), ".forge", "prompts", "history.json");
+}
+function generateId() {
+  return crypto.randomUUID().slice(0, 8);
+}
+async function loadHistory() {
+  const data = await readJsonFile(getHistoryPath());
+  return Array.isArray(data) ? data : [];
+}
+async function appendToHistory(entry) {
+  await ensureDir(path6.dirname(getHistoryPath()));
+  const history = await loadHistory();
+  history.push(entry);
+  await writeJsonFile(getHistoryPath(), history);
+}
+
 // src/modules/promptkit/index.ts
 var TEMPLATE_FILES = {
   feature: "feature.md.eta",
@@ -337,6 +358,9 @@ function renderModeInstruction(mode) {
 function isPromptMode(value) {
   return value === "implement" || value === "review" || value === "plan";
 }
+async function resolvePromptMode(mode) {
+  return resolveMode(mode);
+}
 async function resolveMode(mode) {
   if (mode && isPromptMode(mode)) {
     return mode;
@@ -371,7 +395,8 @@ var Prompt = class _Prompt extends Command {
     'forge prompt cleanup "remove Stripe after Square migration" --mode plan',
     'forge prompt deploy "ship to Vercel" --mode plan',
     'forge prompt test "cover the checkout flow"',
-    'forge prompt feature "add settings page" --copy'
+    'forge prompt feature "add settings page" --copy',
+    'forge prompt feature "add auth" --no-save'
   ];
   static args = {
     type: Args.string({
@@ -392,17 +417,36 @@ var Prompt = class _Prompt extends Command {
     copy: Flags.boolean({
       description: "Copy the prompt to the clipboard if clipboardy is installed.",
       default: false
+    }),
+    save: Flags.boolean({
+      description: "Save the generated prompt to history (use --no-save to skip).",
+      default: true,
+      allowNo: true
     })
   };
   async run() {
     const { args, flags } = await this.parse(_Prompt);
+    const cwd = process.cwd();
+    const resolvedMode = await resolvePromptMode(flags.mode);
     const prompt = await generatePrompt({
-      cwd: process.cwd(),
+      cwd,
       type: args.type,
       task: args.task,
-      mode: flags.mode
+      mode: resolvedMode
     });
     this.log(prompt);
+    if (flags.save) {
+      const entry = {
+        id: generateId(),
+        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        type: args.type,
+        mode: resolvedMode,
+        task: args.task,
+        projectRoot: cwd,
+        prompt
+      };
+      await appendToHistory(entry);
+    }
     if (flags.copy) {
       const copied = await tryCopyToClipboard(prompt);
       if (copied) {

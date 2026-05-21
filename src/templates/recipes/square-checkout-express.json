@@ -1,0 +1,24 @@
+{
+  "id": "square-checkout-express",
+  "name": "Square checkout (Express)",
+  "description": "Square SDK client + Express route that creates a hosted checkout link.",
+  "tags": ["square", "express", "payments", "api"],
+  "notes": "Install: npm i square. Start in sandbox (SQUARE_ENVIRONMENT=sandbox) and flip to production only after end-to-end testing. Wire the route in src/index.ts with app.use(\"/api/checkout\", squareCheckoutRouter).",
+  "files": [
+    {
+      "path": "src/services/squareClient.ts",
+      "operation": "create",
+      "content": "import { Client, Environment } from \"square\";\n\nconst accessToken = process.env.SQUARE_ACCESS_TOKEN;\nconst environment = process.env.SQUARE_ENVIRONMENT ?? \"sandbox\";\n\nif (!accessToken) {\n  throw new Error(\"Missing SQUARE_ACCESS_TOKEN in environment.\");\n}\n\nexport const squareClient = new Client({\n  accessToken,\n  environment:\n    environment === \"production\" ? Environment.Production : Environment.Sandbox,\n});\n\nexport function getSquareLocationId(): string {\n  const id = process.env.SQUARE_LOCATION_ID;\n  if (!id) {\n    throw new Error(\"Missing SQUARE_LOCATION_ID in environment.\");\n  }\n  return id;\n}\n"
+    },
+    {
+      "path": "src/routes/squareCheckout.ts",
+      "operation": "create",
+      "content": "import { Router } from \"express\";\nimport { randomUUID } from \"node:crypto\";\nimport {\n  getSquareLocationId,\n  squareClient,\n} from \"../services/squareClient.js\";\n\nexport const squareCheckoutRouter = Router();\n\n// POST /api/checkout — create a Square hosted checkout link for a list of\n// line items. Replace the request body shape with your real payload before\n// going live.\nsquareCheckoutRouter.post(\"/\", async (req, res, next) => {\n  try {\n    const { lineItems } = req.body as {\n      lineItems?: { name: string; quantity: string; amount: number }[];\n    };\n\n    if (!lineItems || lineItems.length === 0) {\n      res.status(400).json({ error: { message: \"lineItems is required.\" } });\n      return;\n    }\n\n    const response = await squareClient.checkoutApi.createPaymentLink({\n      idempotencyKey: randomUUID(),\n      order: {\n        locationId: getSquareLocationId(),\n        lineItems: lineItems.map((item) => ({\n          name: item.name,\n          quantity: item.quantity,\n          basePriceMoney: {\n            amount: BigInt(item.amount),\n            currency: \"USD\",\n          },\n        })),\n      },\n    });\n\n    const link = response.result.paymentLink;\n    if (!link?.url) {\n      res.status(502).json({\n        error: { message: \"Square did not return a checkout URL.\" },\n      });\n      return;\n    }\n\n    res.json({ data: { url: link.url, id: link.id } });\n  } catch (err) {\n    next(err);\n  }\n});\n"
+    },
+    {
+      "path": ".env.example",
+      "operation": "append",
+      "content": "\nSQUARE_ACCESS_TOKEN=\nSQUARE_LOCATION_ID=\nSQUARE_ENVIRONMENT=sandbox\n"
+    }
+  ]
+}

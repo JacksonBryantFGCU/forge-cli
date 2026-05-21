@@ -8,7 +8,9 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "docs",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",

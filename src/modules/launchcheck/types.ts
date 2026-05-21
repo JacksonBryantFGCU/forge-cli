@@ -34,3 +34,21 @@ export type LaunchCheckResult = {
   strict: boolean;
   checks: LaunchCheck[];
 };
+
+export type SavedReport = LaunchCheckResult & {
+  project: string;
+  cwd: string;
+  timestamp: string;
+  url?: string;
+};
+
+export type ReportDiff = {
+  project: string;
+  from: { timestamp: string; score: number };
+  to: { timestamp: string; score: number };
+  scoreDelta: number;
+  newFailures: LaunchCheck[];
+  fixedFailures: LaunchCheck[];
+  newWarnings: LaunchCheck[];
+  fixedWarnings: LaunchCheck[];
+};

@@ -1,0 +1,14 @@
+{
+  "id": "vite-vercel-client-routing",
+  "name": "Vite + Vercel client routing",
+  "description": "Drop-in vercel.json that rewrites every unmatched path to /index.html so client-side routes survive a refresh on Vercel.",
+  "tags": ["vite", "vercel", "react-router", "deployment", "client-site"],
+  "notes": "Use this on any client-side-routed app (React Router, TanStack Router) deployed to Vercel. Without this rewrite, deep links return 404 after a refresh. Equivalent for Netlify is a _redirects file with `/* /index.html 200`.",
+  "files": [
+    {
+      "path": "vercel.json",
+      "operation": "create",
+      "content": "{\n  \"rewrites\": [\n    {\n      \"source\": \"/(.*)\",\n      \"destination\": \"/index.html\"\n    }\n  ]\n}\n"
+    }
+  ]
+}

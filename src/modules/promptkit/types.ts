@@ -19,3 +19,13 @@ export type GeneratePromptOptions = {
   mode?: string;
   cwd: string;
 };
+
+export type PromptHistoryEntry = {
+  id: string;
+  timestamp: string;
+  type: PromptType;
+  mode: PromptMode;
+  task: string;
+  projectRoot: string;
+  prompt: string;
+};

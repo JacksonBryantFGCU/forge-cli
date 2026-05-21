@@ -334,13 +334,19 @@ async function applyRecipeFile(input: {
 
   if (file.operation === "append") {
     if (dryRun) {
-      return exists
-        ? `Would append to ${file.path}`
-        : `Would create ${file.path}`;
+      if (!exists) return `Would create ${file.path}`;
+      const existing = (await readTextFile(targetPath)) ?? "";
+      if (existing.includes(file.content.trim())) {
+        return `Would skip ${file.path} (content already present)`;
+      }
+      return `Would append to ${file.path}`;
     }
 
     if (exists) {
       const existing = (await readTextFile(targetPath)) ?? "";
+      if (existing.includes(file.content.trim())) {
+        return `Skipped ${file.path} (content already present)`;
+      }
       const separator = existing.endsWith("\n") || existing === "" ? "" : "\n";
       await writeTextFile(targetPath, `${existing}${separator}${file.content}`);
       return `Appended to ${file.path}`;

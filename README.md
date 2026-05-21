@@ -74,8 +74,29 @@ forge launch --skip-build
 | `forge dash` | Terminal dashboard summarizing the current project |
 | `forge config` | Read/write Forge user configuration in `~/.forge/config.json` |
 | `forge template` | Inspect bundled templates and override them in `~/.forge/templates/` |
+| `forge tui` | Launch the interactive Ink-based terminal UI (see `docs/TUI.md`) |
 
 Run `forge <command> --help` for full flag and example listings.
+
+## forge tui
+
+`forge tui` opens an interactive cockpit covering the same surface as the
+CLI: project dashboard, repo doctor, recipe browser, prompt history,
+launch reports, and config editor.
+
+```bash
+forge tui
+```
+
+Six numbered tabs (`1`–`6`), `?` for keyboard help, `Ctrl+K` (or `:` —
+a vim-style alternate for terminals that intercept Ctrl+K) for a
+fuzzy-filter command palette, `q` to quit. Recommended terminal size is
+**100×30 or larger** — below that, a yellow warning banner appears and
+panes may truncate, but the TUI stays usable. First-time users land on
+a Welcome screen with detected state and suggested next steps.
+
+See [`docs/TUI.md`](docs/TUI.md) for the full keybinding reference,
+screen list, limitations, and architecture.
 
 ## Examples
 

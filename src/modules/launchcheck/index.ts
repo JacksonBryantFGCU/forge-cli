@@ -66,5 +66,7 @@ export type {
   LaunchCheck,
   LaunchCheckResult,
   LaunchCheckStatus,
+  ReportDiff,
   RunLaunchCheckOptions,
+  SavedReport,
 } from "./types.js";

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Forge TUI — Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <style>
+    :root { color-scheme: dark; }
+    html, body { margin: 0; padding: 0; background: #060912; min-height: 100vh; font-family: 'Inter', system-ui, sans-serif; color: #E6EDF3; }
+    body {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 28px 24px 60px;
+    }
+    @keyframes tui-blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+    @keyframes tui-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes tui-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .tui-fade { animation: tui-fade 180ms ease-out; }
+    .nav-pill {
+      padding: 4px 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; letter-spacing: 0.5px; cursor: pointer; user-select: none;
+      border: 1px solid rgba(255,255,255,0.08); color: #9FB0C0;
+      background: rgba(255,255,255,0.02);
+      display: flex; align-items: center; gap: 6px;
+      transition: all 120ms ease;
+    }
+    .nav-pill:hover { color: #E6EDF3; background: rgba(255,255,255,0.05); }
+    .nav-pill.active {
+      color: #060912; background: #4F8CFF; border-color: #4F8CFF; font-weight: 600;
+    }
+    .nav-pill kbd {
+      font-family: inherit; font-size: 10px; padding: 0 4px; border-radius: 2px;
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(0,0,0,0.2);
+    }
+    .nav-pill.active kbd { background: rgba(0,0,0,0.18); border-color: rgba(0,0,0,0.15); }
+    .head {
+      width: 100%; max-width: 1480px; margin-bottom: 18px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .head h1 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -0.2px; }
+    .head .sub { color: #6B7A90; font-size: 13px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .toolbar .divider { width: 1px; height: 20px; background: rgba(255,255,255,0.08); margin: 0 4px; }
+    .stage-wrap { display: flex; justify-content: center; }
+    .direction-toggle {
+      display: inline-flex; padding: 2px; border-radius: 6px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .direction-toggle button {
+      padding: 4px 12px; border: none; background: transparent;
+      color: #9FB0C0; font: 600 12px 'JetBrains Mono', monospace; cursor: pointer;
+      border-radius: 4px; letter-spacing: 0.4px;
+    }
+    .direction-toggle button.active { color: #060912; background: #4F8CFF; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script src="tui-tokens.jsx"></script>
+  <script type="text/babel" src="tui-components.jsx"></script>
+  <script type="text/babel" src="tui-data.jsx"></script>
+  <script type="text/babel" src="tui-screen-dashboard.jsx"></script>
+  <script type="text/babel" src="tui-screen-doctor.jsx"></script>
+  <script type="text/babel" src="tui-screen-recipes.jsx"></script>
+  <script type="text/babel" src="tui-screen-prompts.jsx"></script>
+  <script type="text/babel" src="tui-screen-launch.jsx"></script>
+  <script type="text/babel" src="tui-screen-config.jsx"></script>
+  <script type="text/babel" src="tui-screen-extras.jsx"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback } = React;
+
+    const SCREENS = [
+      { id: 'dashboard',   label: 'Dashboard',    key: 'D', render: (d, i) => <ScreenDashboard direction={d} iconSet={i} /> },
+      { id: 'doctor',      label: 'Doctor',       key: 'd', render: (d, i, st) => <ScreenDoctor direction={d} iconSet={i} selectedIdx={st.doctorIdx} /> },
+      { id: 'recipes',     label: 'Recipes',      key: 'R', render: (d, i, st) => <ScreenRecipes direction={d} iconSet={i} selectedIdx={st.recipeIdx} /> },
+      { id: 'prompts',     label: 'Prompts',      key: 'P', render: (d, i, st) => <ScreenPrompts direction={d} iconSet={i} selectedIdx={st.promptIdx} /> },
+      { id: 'launch',      label: 'Launch',       key: 'L', render: (d, i) => <ScreenLaunch direction={d} iconSet={i} /> },
+      { id: 'config',      label: 'Config',       key: 'C', render: (d, i, st) => <ScreenConfig direction={d} iconSet={i} sectionIdx={st.configIdx} /> },
+      { id: 'palette',     label: 'Palette',      key: 'K', render: (d, i, st) => <ScreenPalette direction={d} iconSet={i} query={st.paletteQuery} /> },
+      { id: 'onboarding',  label: 'Onboarding',   key: 'O', render: (d, i, st) => <ScreenOnboarding direction={d} iconSet={i} step={st.onboardStep} /> },
+      { id: 'help',        label: 'Help',         key: '?', render: (d, i) => <ScreenHelp direction={d} iconSet={i} /> },
+      { id: 'loading',     label: 'Loading',      key: '1', render: (d, i) => <ScreenStates direction={d} iconSet={i} which="loading" /> },
+      { id: 'empty',       label: 'Empty',        key: '2', render: (d, i) => <ScreenStates direction={d} iconSet={i} which="empty" /> },
+      { id: 'error',       label: 'Error',        key: '3', render: (d, i) => <ScreenStates direction={d} iconSet={i} which="error" /> },
+    ];
+
+    // Locked design tokens — Tweaks panel removed; settings baked in.
+    const CONFIG = {
+      theme:    'slate',
+      density:  'comfortable',
+      accent:   'blue',
+      border:   'single',
+      iconSet:  'nerd',
+      width:    140,
+    };
+
+    function App() {
+      const tweaks = CONFIG;
+      const [screen, setScreen] = useState('dashboard');
+      const [direction, setDirection] = useState('a');
+      const [state, setState] = useState({
+        doctorIdx: 0,
+        recipeIdx: 0,
+        promptIdx: 0,
+        configIdx: 0,
+        onboardStep: 2,
+        paletteQuery: 'doc',
+      });
+      const [paletteOpen, setPaletteOpen] = useState(false);
+
+      // Map terminal width preview to row count
+      const cols = Number(tweaks.width) || 140;
+      const rows = cols >= 160 ? 44 : cols >= 140 ? 40 : cols >= 120 ? 36 : 30;
+
+      // Keyboard handlers
+      useEffect(() => {
+        function onKey(e) {
+          if (e.metaKey && e.key.toLowerCase() === 'k') { e.preventDefault(); setScreen('palette'); return; }
+          // Don't capture typing inside inputs
+          if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+          const upper = e.shiftKey ? e.key.toUpperCase() : e.key;
+          for (const s of SCREENS) {
+            if (s.key === e.key || s.key === upper) {
+              setScreen(s.id);
+              return;
+            }
+          }
+
+          // List nav
+          if (e.key === 'j' || e.key === 'ArrowDown') {
+            setState((st) => mutateIdx(screen, st, +1));
+          } else if (e.key === 'k' || e.key === 'ArrowUp') {
+            setState((st) => mutateIdx(screen, st, -1));
+          } else if (e.key === 'Escape') {
+            if (screen === 'palette' || screen === 'help') setScreen('dashboard');
+          }
+        }
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, [screen]);
+
+      function mutateIdx(scr, st, delta) {
+        if (scr === 'doctor') {
+          const n = window.ForgeData.doctor.issues.length;
+          return { ...st, doctorIdx: (st.doctorIdx + delta + n) % n };
+        }
+        if (scr === 'recipes') {
+          const n = window.ForgeData.recipes.length;
+          return { ...st, recipeIdx: (st.recipeIdx + delta + n) % n };
+        }
+        if (scr === 'prompts') {
+          const n = window.ForgeData.prompts.length;
+          return { ...st, promptIdx: (st.promptIdx + delta + n) % n };
+        }
+        if (scr === 'config') {
+          const n = window.ForgeData.config.sections.length;
+          return { ...st, configIdx: (st.configIdx + delta + n) % n };
+        }
+        return st;
+      }
+
+      const screenDef = SCREENS.find(s => s.id === screen) || SCREENS[0];
+
+      return (
+        <>
+          <div className="head">
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
+              <h1 style={{ color: '#4F8CFF', fontFamily: 'JetBrains Mono, monospace', letterSpacing: 0.6 }}>◆ forge TUI</h1>
+              <span className="sub">interactive prototype · {cols}×{rows} · {window.TuiTokens.themes[tweaks.theme].name} · {tweaks.density}</span>
+              <span style={{ flex: 1 }} />
+              <span className="sub">⌘K palette · D R P L C ? to jump · j/k to navigate</span>
+            </div>
+
+            <div className="toolbar">
+              {SCREENS.map(s => (
+                <button
+                  key={s.id}
+                  className={`nav-pill ${screen === s.id ? 'active' : ''}`}
+                  onClick={() => setScreen(s.id)}
+                >
+                  {s.label}
+                  <kbd>{s.key}</kbd>
+                </button>
+              ))}
+              <span className="divider" />
+              <div className="direction-toggle">
+                <button className={direction === 'a' ? 'active' : ''} onClick={() => setDirection('a')}>A · cockpit</button>
+                <button className={direction === 'b' ? 'active' : ''} onClick={() => setDirection('b')}>B · hero</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="stage-wrap">
+            <div key={`${screen}-${direction}-${tweaks.theme}-${tweaks.accent}-${tweaks.density}-${cols}`} className="tui-fade">
+              <TuiFrame
+                theme={tweaks.theme}
+                accent={tweaks.accent}
+                density={tweaks.density}
+                borderStyle={tweaks.border}
+                iconSet={tweaks.iconSet}
+                cols={cols}
+                rows={rows}
+                title={`forge · ${window.ForgeData.project.path} · ${screenDef.label.toLowerCase()}`}
+              >
+                {screenDef.render(direction, tweaks.iconSet, state)}
+              </TuiFrame>
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

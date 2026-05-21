@@ -17,6 +17,7 @@ export default defineConfig({
     "src/commands/dash/index.ts",
     "src/commands/config/index.ts",
     "src/commands/template/index.ts",
+    "src/commands/tui/index.ts",
   ],
   format: ["esm"],
   target: "node20",

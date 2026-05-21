@@ -1,0 +1,17 @@
+# <%= projectName %>
+
+Generated with Forge.
+
+## Setup
+
+```bash
+npm install
+npm run dev
+```
+
+## Stack
+
+- Vite
+- React
+- TypeScript
+- Tailwind CSS v3

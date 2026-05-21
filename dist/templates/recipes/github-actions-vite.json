@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-vite",
+  "name": "GitHub Actions: build Vite app",
+  "description": "CI workflow that installs deps, typechecks, and builds a Vite project on push and PR.",
+  "tags": ["ci", "github-actions", "vite", "build"],
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "operation": "create",
+      "content": "name: CI\n\non:\n  push:\n    branches: [main]\n  pull_request:\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 20\n          cache: npm\n      - run: npm ci\n      - run: npm run typecheck --if-present\n      - run: npm run build\n"
+    }
+  ]
+}

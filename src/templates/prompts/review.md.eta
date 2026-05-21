@@ -1,0 +1,36 @@
+# Review code changes (<%= mode %> mode)
+
+## Goal
+Review the following changes or area of code: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Identify the diff or files in scope and read them in full.
+2. Check for correctness: does the code do what it claims?
+3. Check for bugs, race conditions, error handling, and edge cases.
+4. Check for security issues (injection, secret leakage, unsafe parsing).
+5. Check for readability, naming, and consistency with surrounding code.
+6. List findings as actionable comments, grouped by severity.
+
+## Constraints
+- Do not edit code unless the task explicitly asks you to apply the suggestions.
+- Distinguish blockers from nits — do not treat every preference as a defect.
+- Cite specific files and line ranges for each finding.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before forming an opinion.
+- Do not edit code unless explicitly asked.
+- Preserve existing behavior unless the task explicitly asks for a behavior change.
+- Run the project's build/typecheck if a change is approved.
+- Summarize findings clearly, citing files and line ranges.

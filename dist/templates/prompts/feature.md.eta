@@ -1,0 +1,38 @@
+# Implement a new feature (<%= mode %> mode)
+
+## Goal
+Add the following feature to this project: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Locate where similar features live and match their structure.
+2. Identify the smallest set of files needed to deliver the feature.
+3. Design the data flow and component/module boundaries before writing code.
+4. Implement the feature behind clear, well-named functions or components.
+5. Wire it into the existing routing, navigation, or entrypoint as needed.
+6. Cover non-trivial logic with tests if a test setup is present.
+
+## Constraints
+- Do not introduce new libraries unless clearly necessary.
+- Follow the existing TypeScript, styling, and folder conventions.
+- Keep changes scoped to the feature — no opportunistic refactors.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before making any changes.
+- Make the smallest correct change that satisfies the goal.
+- Do not rewrite unrelated code.
+- Preserve existing behavior unless the task explicitly asks for a behavior change.
+- Update or add tests when the project already has a test setup.
+- Run the project's build/typecheck if available before declaring done.
+- Summarize the changed files and the reasoning behind the change.

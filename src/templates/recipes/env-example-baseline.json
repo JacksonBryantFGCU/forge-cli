@@ -1,0 +1,14 @@
+{
+  "id": "env-example-baseline",
+  "name": ".env.example baseline",
+  "description": "Create a starter .env.example documenting common variables for client-side apps.",
+  "tags": ["env", "config", "vite"],
+  "notes": "Use this to seed .env.example when a project is missing one. Trim variables you don't need.",
+  "files": [
+    {
+      "path": ".env.example",
+      "operation": "create",
+      "content": "# App\nVITE_APP_NAME=\nVITE_APP_URL=\n\n# Analytics / monitoring (optional)\nVITE_SENTRY_DSN=\nVITE_PLAUSIBLE_DOMAIN=\n\n# Auth / data (optional)\nVITE_SUPABASE_URL=\nVITE_SUPABASE_ANON_KEY=\n"
+    }
+  ]
+}

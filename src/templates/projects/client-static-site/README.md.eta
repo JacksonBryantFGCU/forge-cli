@@ -1,0 +1,26 @@
+# <%= projectName %>
+
+Generated with Forge.
+
+Static marketing site built with Vite, React Router, TypeScript, and Tailwind.
+
+## Setup
+
+```bash
+npm install
+npm run dev
+```
+
+## Pages
+
+- Home, About, Services, Gallery, Contact
+
+## Launch checklist
+
+- [ ] Replace placeholder copy on every page
+- [ ] Replace the og:title / og:description / favicon
+- [ ] Add real images and compress them under 1 MB
+- [ ] Wire the Contact form to a real endpoint or email service
+- [ ] Set up the production domain
+- [ ] Verify `vercel.json` SPA rewrite is deployed
+- [ ] Run `forge launch` before going live

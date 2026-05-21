@@ -1,0 +1,28 @@
+<% if (type === "hook") { %><%= testFrameworkImport %>
+import { renderHook, act } from "@testing-library/react";
+<%= componentImport %>
+
+describe("<%= exportName %>", () => {
+  it("exposes value and setValue", () => {
+    const { result } = renderHook(() => <%= exportName %>());
+
+    expect(result.current.value).toBe("");
+
+    act(() => {
+      result.current.setValue("hello");
+    });
+
+    expect(result.current.value).toBe("hello");
+  });
+});
+<% } else { %><%= testFrameworkImport %>
+import { render, screen } from "@testing-library/react";
+<%= componentImport %>
+
+describe("<%= exportName %>", () => {
+  it("renders without crashing", () => {
+    render(<<%= exportName %> />);
+    expect(screen.getByText(/<%= name %>/i)).toBeInTheDocument();
+  });
+});
+<% } %>

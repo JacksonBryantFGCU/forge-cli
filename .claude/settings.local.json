@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(node dist/index.js doctor --json)",
+      "Bash(node dist/index.js prompt debug \"Vercel refresh gives 404\")",
+      "Bash(node dist/index.js component Navbar --dry-run)",
+      "Bash(node dist/index.js pack list)",
+      "Bash(node dist/index.js new test-app --dry-run)",
+      "Bash(node dist/index.js launch)",
+      "Bash(node dist/index.js dash)",
+      "Bash(node dist/index.js doctor)",
+      "Bash(node dist/index.js doctor --category deployment)",
+      "Bash(node dist/index.js doctor --rule missing-env-example)",
+      "Bash(node dist/index.js doctor --fix --rule missing-env-example)",
+      "Bash(node *)",
+      "Bash(npm test *)",
+      "Read(//c/Users/jackb/Documents/**)",
+      "Bash(rm -rf forge-render-test)",
+      "Bash(echo \"EXIT: $?\")",
+      "Read(//c//**)",
+      "Bash(rm -rf /tmp/forge-cfg)"
+    ]
+  }
+}

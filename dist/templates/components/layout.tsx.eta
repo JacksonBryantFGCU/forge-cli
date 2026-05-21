@@ -1,0 +1,12 @@
+<% if (useMotion) { %>import { motion } from "framer-motion";
+<% } %><% if (hasTypes) { %>import type { <%= name %>Props } from "./<%= name %>.types.js";
+<% } %>
+<%= exportPrefix %> <%= exportName %>({ className }: <%= hasTypes ? name + "Props" : "{ className?: string }" %>) {
+  return (
+    <<%= useMotion ? "motion." : "" %>div className={["min-h-screen flex flex-col", className].filter(Boolean).join(" ")}>
+      <header className="border-b border-gray-200 p-4">Header</header>
+      <main className="flex-1 p-4">{/* children go here */}</main>
+      <footer className="border-t border-gray-200 p-4 text-sm text-gray-600">Footer</footer>
+    </<%= useMotion ? "motion." : "" %>div>
+  );
+}

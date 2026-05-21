@@ -1,0 +1,10 @@
+import { useState } from "react";
+
+export function <%= exportName %>() {
+  const [value, setValue] = useState<string>("");
+
+  return {
+    value,
+    setValue,
+  };
+}

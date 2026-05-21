@@ -1,0 +1,19 @@
+{
+  "id": "supabase-client-react",
+  "name": "Supabase client (React)",
+  "description": "Singleton Supabase browser client wired to VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+  "tags": ["supabase", "react", "vite", "auth"],
+  "notes": "Install: npm i @supabase/supabase-js. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local.",
+  "files": [
+    {
+      "path": "src/lib/supabase.ts",
+      "operation": "create",
+      "content": "import { createClient } from \"@supabase/supabase-js\";\n\nconst url = import.meta.env.VITE_SUPABASE_URL;\nconst anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;\n\nif (!url || !anonKey) {\n  throw new Error(\n    \"Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in environment.\",\n  );\n}\n\nexport const supabase = createClient(url, anonKey);\n"
+    },
+    {
+      "path": ".env.example",
+      "operation": "append",
+      "content": "\nVITE_SUPABASE_URL=\nVITE_SUPABASE_ANON_KEY=\n"
+    }
+  ]
+}

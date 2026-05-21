@@ -1,0 +1,18 @@
+<% if (useMotion) { %>import { motion } from "framer-motion";
+<% } %><% if (hasTypes) { %>import type { <%= name %>Props } from "./<%= name %>.types.js";
+<% } %>
+<%= exportPrefix %> <%= exportName %>({ className }: <%= hasTypes ? name + "Props" : "{ className?: string }" %>) {
+  return (
+    <<%= useMotion ? "motion." : "" %>div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="<%= name %>-title"
+      className={["fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4", className].filter(Boolean).join(" ")}
+    >
+      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+        <h2 id="<%= name %>-title" className="text-lg font-semibold"><%= name %></h2>
+        <p className="mt-2 text-sm text-gray-600">Modal body goes here.</p>
+      </div>
+    </<%= useMotion ? "motion." : "" %>div>
+  );
+}

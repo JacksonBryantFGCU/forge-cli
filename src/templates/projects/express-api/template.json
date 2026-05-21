@@ -1,0 +1,16 @@
+{
+  "id": "express-api",
+  "name": "Express API",
+  "description": "TypeScript Express API with helmet, cors, dotenv, and zod.",
+  "tags": ["express", "node", "typescript", "api"],
+  "files": [
+    { "path": "package.json", "template": "package.json.eta" },
+    { "path": "src/index.ts", "template": "src/index.ts.eta" },
+    { "path": "src/routes/health.ts", "template": "src/routes/health.ts.eta" },
+    { "path": "src/middleware/error-handler.ts", "template": "src/middleware/error-handler.ts.eta" },
+    { "path": "tsconfig.json", "template": "tsconfig.json.eta" },
+    { "path": ".env.example", "template": ".env.example.eta" },
+    { "path": ".gitignore", "template": ".gitignore.eta" },
+    { "path": "README.md", "template": "README.md.eta" }
+  ]
+}

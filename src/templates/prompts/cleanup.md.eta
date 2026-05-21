@@ -1,0 +1,38 @@
+# Clean up code or dependencies (<%= mode %> mode)
+
+## Goal
+Perform this cleanup: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Search the codebase for every reference to what is being removed.
+2. List each call site, import, type, config entry, env var, and script that touches it.
+3. Remove dead imports, unused files, and orphan dependencies.
+4. Update package.json, lockfile-relevant configs, and env example files accordingly.
+5. Run typecheck and build to confirm nothing downstream broke.
+6. Summarize exactly which files were touched and which dependencies were removed.
+
+## Constraints
+- Do not delete anything still referenced elsewhere — confirm with a search first.
+- Do not change behavior of code that survives the cleanup.
+- Do not opportunistically rewrite unrelated code.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before making any changes.
+- Make the smallest correct change that satisfies the goal.
+- Do not rewrite unrelated code.
+- Preserve existing behavior unless the task explicitly asks for a behavior change.
+- Update or add tests when the project already has a test setup.
+- Run the project's build/typecheck if available before declaring done.
+- Summarize the changed files and removed dependencies.

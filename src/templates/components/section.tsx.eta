@@ -1,0 +1,13 @@
+<% if (useMotion) { %>import { motion } from "framer-motion";
+<% } %><% if (hasTypes) { %>import type { <%= name %>Props } from "./<%= name %>.types.js";
+<% } %>
+<%= exportPrefix %> <%= exportName %>({ className }: <%= hasTypes ? name + "Props" : "{ className?: string }" %>) {
+  return (
+    <<%= useMotion ? "motion." : "" %>section className={["w-full px-4 py-12 sm:px-6 sm:py-16", className].filter(Boolean).join(" ")}>
+      <div className="mx-auto max-w-3xl text-center">
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl"><%= name %></h2>
+        <p className="mt-2 text-sm text-gray-600">Replace this with the real section content.</p>
+      </div>
+    </<%= useMotion ? "motion." : "" %>section>
+  );
+}

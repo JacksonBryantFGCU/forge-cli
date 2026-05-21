@@ -1,0 +1,13 @@
+export function App() {
+  return (
+    <main style={{ padding: "2rem", maxWidth: "48rem", margin: "0 auto" }}>
+      <p style={{ textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "0.875rem", color: "#64748b" }}>
+        Forge Project
+      </p>
+      <h1 style={{ marginTop: "0.5rem", fontSize: "2.25rem", fontWeight: 700 }}><%= projectName %></h1>
+      <p style={{ marginTop: "1rem", color: "#475569" }}>
+        Your project is ready. Start building.
+      </p>
+    </main>
+  );
+}

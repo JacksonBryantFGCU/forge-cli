@@ -1,0 +1,26 @@
+import { Route, Routes } from "react-router-dom";
+import { Navbar } from "./components/Navbar.js";
+import { Footer } from "./components/Footer.js";
+import { Home } from "./pages/Home.js";
+import { About } from "./pages/About.js";
+import { Services } from "./pages/Services.js";
+import { Gallery } from "./pages/Gallery.js";
+import { Contact } from "./pages/Contact.js";
+
+export function App() {
+  return (
+    <div className="flex min-h-screen flex-col bg-white text-slate-900">
+      <Navbar />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  );
+}

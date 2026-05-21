@@ -1,0 +1,11 @@
+<% if (useMotion) { %>import { motion } from "framer-motion";
+<% } %><% if (hasTypes) { %>import type { <%= name %>Props } from "./<%= name %>.types.js";
+<% } %>
+<%= exportPrefix %> <%= exportName %>({ className }: <%= hasTypes ? name + "Props" : "{ className?: string }" %>) {
+  return (
+    <<%= useMotion ? "motion." : "" %>main className={["mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 sm:py-12", className].filter(Boolean).join(" ")}>
+      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl"><%= name %></h1>
+      <p className="mt-2 text-sm text-gray-600">Replace this with the real page content.</p>
+    </<%= useMotion ? "motion." : "" %>main>
+  );
+}

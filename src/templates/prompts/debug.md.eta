@@ -1,0 +1,38 @@
+# Debug a problem (<%= mode %> mode)
+
+## Goal
+Diagnose and fix the following issue: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Reproduce or describe the failing behavior using the code and config available.
+2. Form a hypothesis about the root cause — name the specific file or system likely responsible.
+3. Inspect that file before guessing — confirm or rule out the hypothesis.
+4. Continue narrowing the search until the actual root cause is identified.
+5. Apply the smallest correct fix at the root, not at the symptom.
+6. Add or adjust a test that would have caught the bug, if a test setup exists.
+
+## Constraints
+- Do not patch the symptom in a way that hides the underlying cause.
+- Do not refactor unrelated code while fixing the bug.
+- Confirm the fix addresses the reported behavior before declaring it done.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before making any changes.
+- Make the smallest correct change that satisfies the goal.
+- Do not rewrite unrelated code.
+- Preserve existing behavior unless the task explicitly asks for a behavior change.
+- Update or add tests when the project already has a test setup.
+- Run the project's build/typecheck if available before declaring done.
+- Summarize the changed files and the reasoning behind the change.

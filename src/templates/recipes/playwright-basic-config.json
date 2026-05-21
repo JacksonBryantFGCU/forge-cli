@@ -1,0 +1,19 @@
+{
+  "id": "playwright-basic-config",
+  "name": "Playwright basic config",
+  "description": "Minimal Playwright config plus a smoke test that hits the dev server.",
+  "tags": ["playwright", "testing", "e2e"],
+  "notes": "Install: npm i -D @playwright/test && npx playwright install. Adjust baseURL for your dev server.",
+  "files": [
+    {
+      "path": "playwright.config.ts",
+      "operation": "create",
+      "content": "import { defineConfig, devices } from \"@playwright/test\";\n\nexport default defineConfig({\n  testDir: \"./e2e\",\n  fullyParallel: true,\n  retries: 0,\n  use: {\n    baseURL: \"http://localhost:5173\",\n    trace: \"on-first-retry\",\n  },\n  projects: [\n    {\n      name: \"chromium\",\n      use: { ...devices[\"Desktop Chrome\"] },\n    },\n  ],\n});\n"
+    },
+    {
+      "path": "e2e/smoke.spec.ts",
+      "operation": "create",
+      "content": "import { expect, test } from \"@playwright/test\";\n\ntest(\"home page loads\", async ({ page }) => {\n  await page.goto(\"/\");\n  await expect(page).toHaveTitle(/.+/);\n});\n"
+    }
+  ]
+}

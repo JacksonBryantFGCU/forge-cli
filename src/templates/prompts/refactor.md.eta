@@ -1,0 +1,38 @@
+# Refactor existing code (<%= mode %> mode)
+
+## Goal
+Refactor the codebase as follows: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Read the target code and its callers before touching anything.
+2. Identify the behavior contract that must be preserved.
+3. Plan the structural change in terms of files, exports, and call sites.
+4. Apply the refactor in small, reviewable steps.
+5. Update all call sites and imports affected by the change.
+6. Run typecheck, build, and tests to confirm behavior is preserved.
+
+## Constraints
+- Preserve existing behavior — no functional changes hidden inside the refactor.
+- Do not rename or move files that are unrelated to the refactor scope.
+- Avoid introducing new abstractions unless they directly serve the stated goal.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before making any changes.
+- Make the smallest correct change that satisfies the goal.
+- Do not rewrite unrelated code.
+- Preserve existing behavior unless the task explicitly asks for a behavior change.
+- Update or add tests when the project already has a test setup.
+- Run the project's build/typecheck if available before declaring done.
+- Summarize the changed files and the reasoning behind the change.

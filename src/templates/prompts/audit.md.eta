@@ -1,0 +1,36 @@
+# Audit code for issues (<%= mode %> mode)
+
+## Goal
+Audit the project against this concern: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Identify which files and modules are in scope for this audit.
+2. Read each in full before forming an opinion — do not skim.
+3. Look for correctness, security, performance, and accessibility issues relevant to the goal.
+4. Group findings by severity (high / medium / low) and category.
+5. For each finding, cite the file and the specific lines or pattern.
+6. Suggest a concrete fix or follow-up action for every finding.
+
+## Constraints
+- Do not modify code during the audit unless explicitly asked.
+- Be specific — vague advice like "consider improving X" is not useful.
+- Distinguish actual problems from stylistic preferences.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before making any changes.
+- Do not edit code unless explicitly asked.
+- Preserve existing behavior unless the task explicitly asks for a behavior change.
+- Run the project's build/typecheck if a change is approved.
+- Summarize findings clearly, citing files and line ranges.

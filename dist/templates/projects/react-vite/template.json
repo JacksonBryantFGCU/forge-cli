@@ -1,0 +1,18 @@
+{
+  "id": "react-vite",
+  "name": "React + Vite",
+  "description": "Vite + React + TypeScript starter without Tailwind.",
+  "tags": ["react", "vite", "typescript"],
+  "files": [
+    { "path": "package.json", "template": "package.json.eta" },
+    { "path": "index.html", "template": "index.html.eta" },
+    { "path": "src/main.tsx", "template": "src/main.tsx.eta" },
+    { "path": "src/App.tsx", "template": "src/App.tsx.eta" },
+    { "path": "src/index.css", "template": "src/index.css.eta" },
+    { "path": "tsconfig.json", "template": "tsconfig.json.eta" },
+    { "path": "vite.config.ts", "template": "vite.config.ts.eta" },
+    { "path": ".gitignore", "template": ".gitignore.eta" },
+    { "path": ".env.example", "template": ".env.example.eta" },
+    { "path": "README.md", "template": "README.md.eta" }
+  ]
+}

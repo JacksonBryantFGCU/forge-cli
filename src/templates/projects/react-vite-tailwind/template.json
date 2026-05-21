@@ -1,0 +1,22 @@
+{
+  "id": "react-vite-tailwind",
+  "name": "React + Vite + Tailwind",
+  "description": "Vite + React + TypeScript + Tailwind v3 starter.",
+  "tags": ["react", "vite", "typescript", "tailwind"],
+  "files": [
+    { "path": "package.json", "template": "package.json.eta" },
+    { "path": "index.html", "template": "index.html.eta" },
+    { "path": "src/main.tsx", "template": "src/main.tsx.eta" },
+    { "path": "src/App.tsx", "template": "src/App.tsx.eta" },
+    { "path": "src/index.css", "template": "src/index.css.eta" },
+    { "path": "src/components/.gitkeep", "template": "src/components/.gitkeep.eta" },
+    { "path": "src/pages/.gitkeep", "template": "src/pages/.gitkeep.eta" },
+    { "path": "tsconfig.json", "template": "tsconfig.json.eta" },
+    { "path": "vite.config.ts", "template": "vite.config.ts.eta" },
+    { "path": "tailwind.config.js", "template": "tailwind.config.js.eta" },
+    { "path": "postcss.config.js", "template": "postcss.config.js.eta" },
+    { "path": ".gitignore", "template": ".gitignore.eta" },
+    { "path": ".env.example", "template": ".env.example.eta" },
+    { "path": "README.md", "template": "README.md.eta" }
+  ]
+}

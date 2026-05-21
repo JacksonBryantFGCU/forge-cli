@@ -1,0 +1,40 @@
+# Prepare for deployment (<%= mode %> mode)
+
+## Goal
+Prepare this project to deploy: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Confirm the build script runs cleanly and produces the expected output.
+2. Check environment variables — every required key must be documented in .env.example.
+3. Review host-specific configuration (e.g. vercel.json, netlify.toml, Dockerfile) for the target platform.
+<% if (hasReactRouter) { %>4. For React Router SPAs on Vercel, confirm a fallback rewrite to /index.html exists.
+5. Verify routing, asset paths, and base URLs work in a production build, not just dev.
+6. Identify any pre-deploy steps (migrations, cache warmups, feature flags).
+7. Write a short checklist the human operator can follow to ship safely.
+<% } else { %>4. Verify routing, asset paths, and base URLs work in a production build, not just dev.
+5. Identify any pre-deploy steps (migrations, cache warmups, feature flags).
+6. Write a short checklist the human operator can follow to ship safely.
+<% } %>
+## Constraints
+- Do not modify secrets or commit anything that looks like a credential.
+- Do not change provider configuration without flagging the change explicitly.
+- Treat .env files as read-only references — never print their contents.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before making any changes.
+- Make the smallest correct change that satisfies the goal.
+- Do not rewrite unrelated code.
+- Run the project's build/typecheck before declaring done.
+- Summarize the changed files and any operator follow-ups required.

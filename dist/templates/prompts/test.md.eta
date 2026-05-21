@@ -1,0 +1,36 @@
+# Add or fix tests (<%= mode %> mode)
+
+## Goal
+Add or repair tests for: <%= task %>
+
+## Project context
+- Framework: <%= framework %>
+- Language: <%= language %>
+- Package manager: <%= packageManager %>
+- Tailwind: <%= hasTailwind ? "yes" : "no" %>
+- React Router: <%= hasReactRouter ? "yes" : "no" %>
+- Available scripts: <%= scripts %>
+
+## Mode
+<%= modeInstructions %>
+
+## Steps
+1. Locate the test runner and existing test files — match their style and structure.
+2. Identify the units of behavior worth testing, not implementation details.
+3. Write focused tests covering the golden path and meaningful edge cases.
+4. If tests are failing, find the real cause before changing assertions.
+5. Run the test suite to confirm everything still passes.
+
+## Constraints
+- Do not weaken assertions just to make a test pass.
+- Do not mock the system under test — mock only its external boundaries.
+- Keep test files near the code they cover unless the project pattern says otherwise.
+<% for (const c of constraints) { %>- <%= c %>
+<% } %>
+## Safety instructions
+- Inspect the relevant files before making any changes.
+- Make the smallest correct change that satisfies the goal.
+- Do not rewrite unrelated code.
+- Preserve existing behavior unless the task explicitly asks for a behavior change.
+- Run the project's test/build commands before declaring done.
+- Summarize the new and changed tests, and any production code that had to move.

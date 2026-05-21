@@ -1,0 +1,10 @@
+<% if (useMotion) { %>import { motion } from "framer-motion";
+<% } %><% if (hasTypes) { %>import type { <%= name %>Props } from "./<%= name %>.types.js";
+<% } %>
+<%= exportPrefix %> <%= exportName %>({ className }: <%= hasTypes ? name + "Props" : "{ className?: string }" %>) {
+  return (
+    <<%= useMotion ? "motion." : "" %>section className={["p-4", className].filter(Boolean).join(" ")}>
+      <h2 className="text-xl font-semibold"><%= name %></h2>
+    </<%= useMotion ? "motion." : "" %>section>
+  );
+}

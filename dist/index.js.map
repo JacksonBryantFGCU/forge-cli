@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.ts"],"sourcesContent":["#!/usr/bin/env node\n\nimport { handle, run } from \"@oclif/core\";\n\nawait run(process.argv.slice(2), import.meta.url).catch(handle);\n"],"mappings":";;;AAEA,SAAS,QAAQ,WAAW;AAE5B,MAAM,IAAI,QAAQ,KAAK,MAAM,CAAC,GAAG,YAAY,GAAG,EAAE,MAAM,MAAM;","names":[]}

@@ -1,0 +1,14 @@
+{
+  "id": "vite-vercel-spa-rewrite",
+  "name": "Vite + Vercel SPA rewrite",
+  "description": "Add a fallback rewrite so React Router refreshes don't 404 on Vercel.",
+  "tags": ["vite", "vercel", "react-router", "deployment"],
+  "notes": "Drop this in any Vite + React Router project deployed to Vercel. Without it, deep links return 404 on refresh.",
+  "files": [
+    {
+      "path": "vercel.json",
+      "operation": "create",
+      "content": "{\n  \"rewrites\": [\n    {\n      \"source\": \"/(.*)\",\n      \"destination\": \"/index.html\"\n    }\n  ]\n}\n"
+    }
+  ]
+}

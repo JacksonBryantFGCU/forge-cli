@@ -1,0 +1,10 @@
+# <%= projectName %>
+
+Generated with Forge.
+
+## Setup
+
+```bash
+npm install
+npm run dev
+```

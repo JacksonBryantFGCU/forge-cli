@@ -1,0 +1,29 @@
+{
+  "id": "client-static-site",
+  "name": "Client static site",
+  "description": "React + Vite + Tailwind multi-page client marketing site with Vercel SPA rewrite.",
+  "tags": ["react", "vite", "tailwind", "react-router", "vercel", "client-site"],
+  "files": [
+    { "path": "package.json", "template": "package.json.eta" },
+    { "path": "index.html", "template": "index.html.eta" },
+    { "path": "src/main.tsx", "template": "src/main.tsx.eta" },
+    { "path": "src/App.tsx", "template": "src/App.tsx.eta" },
+    { "path": "src/index.css", "template": "src/index.css.eta" },
+    { "path": "src/components/Container.tsx", "template": "src/components/Container.tsx.eta" },
+    { "path": "src/components/Navbar.tsx", "template": "src/components/Navbar.tsx.eta" },
+    { "path": "src/components/Footer.tsx", "template": "src/components/Footer.tsx.eta" },
+    { "path": "src/pages/Home.tsx", "template": "src/pages/Home.tsx.eta" },
+    { "path": "src/pages/About.tsx", "template": "src/pages/About.tsx.eta" },
+    { "path": "src/pages/Services.tsx", "template": "src/pages/Services.tsx.eta" },
+    { "path": "src/pages/Gallery.tsx", "template": "src/pages/Gallery.tsx.eta" },
+    { "path": "src/pages/Contact.tsx", "template": "src/pages/Contact.tsx.eta" },
+    { "path": "tsconfig.json", "template": "tsconfig.json.eta" },
+    { "path": "vite.config.ts", "template": "vite.config.ts.eta" },
+    { "path": "tailwind.config.js", "template": "tailwind.config.js.eta" },
+    { "path": "postcss.config.js", "template": "postcss.config.js.eta" },
+    { "path": "vercel.json", "template": "vercel.json.eta" },
+    { "path": ".gitignore", "template": ".gitignore.eta" },
+    { "path": ".env.example", "template": ".env.example.eta" },
+    { "path": "README.md", "template": "README.md.eta" }
+  ]
+}

@@ -22,7 +22,9 @@
       "Bash(rm -rf /tmp/forge-cfg)",
       "Bash(Get-ChildItem -Force)",
       "Bash(Select-Object Name, PSIsContainer)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(git checkout *)"
     ]
   }
 }

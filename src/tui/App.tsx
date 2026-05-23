@@ -28,7 +28,7 @@ import { isPaletteShortcut } from "./key-helpers.js";
 const globalShortcuts = [
   { key: "1-6", label: "tabs" },
   { key: "?", label: "help" },
-  { key: "ctrl+k / :", label: "palette" },
+  { key: "shift+p", label: "palette" },
   { key: "tab", label: "focus" },
   { key: "q", label: "quit" },
 ];

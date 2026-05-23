@@ -111,8 +111,7 @@ var GLOBAL_GROUP = {
   title: "Global",
   items: [
     ["?", "toggle this help"],
-    ["ctrl+k", "open command palette"],
-    [":", "open command palette (vim-style)"],
+    ["shift+p", "open command palette"],
     ["esc", "close overlay / back"],
     ["q", "quit"]
   ]
@@ -191,7 +190,7 @@ var SCREEN_KEYS = {
     title: "Welcome",
     items: [
       ["1-6", "enter a screen"],
-      ["ctrl+k / :", "open command palette"],
+      ["shift+p", "open command palette"],
       ["?", "toggle this help"],
       ["q", "quit"]
     ]
@@ -5870,13 +5869,13 @@ function OnboardingScreen() {
         {
           keyHint: "3",
           label: "Browse recipes",
-          detail: "install bundled defaults via the command palette (ctrl+k)"
+          detail: "install bundled defaults via the command palette (shift+p)"
         }
       ),
       /* @__PURE__ */ jsx17(
         StepLine,
         {
-          keyHint: "ctrl+k",
+          keyHint: "shift+p",
           label: "Open the command palette",
           detail: "navigate, run actions, or init defaults from one menu"
         }
@@ -5902,7 +5901,7 @@ function OnboardingScreen() {
         "forge launch --skip-build --save"
       ] })
     ] }),
-    /* @__PURE__ */ jsx17(Box16, { marginTop: 1, children: /* @__PURE__ */ jsx17(Text16, { color: theme.textMuted, children: "Press 1\u20136 to enter a screen, ctrl+k for the action palette, ? for help, q to quit." }) })
+    /* @__PURE__ */ jsx17(Box16, { marginTop: 1, children: /* @__PURE__ */ jsx17(Text16, { color: theme.textMuted, children: "Press 1\u20136 to enter a screen, shift+p for the action palette, ? for help, q to quit." }) })
   ] }) }) });
 }
 function SignalsList({
@@ -6041,12 +6040,9 @@ function findRouteByKey(key) {
 
 // src/tui/key-helpers.ts
 function isPaletteShortcut(input, key) {
-  if (!key.ctrl && !key.meta && input === ":") return true;
-  if (input === "\v") return true;
-  if (key.ctrl) {
-    if (input === "k" || input === "K") return true;
-    if (input === "") return true;
-  }
+  if (key.ctrl || key.meta) return false;
+  if (input === "P") return true;
+  if (key.shift && input === "p") return true;
   return false;
 }
 
@@ -6055,7 +6051,7 @@ import { jsx as jsx18, jsxs as jsxs17 } from "react/jsx-runtime";
 var globalShortcuts = [
   { key: "1-6", label: "tabs" },
   { key: "?", label: "help" },
-  { key: "ctrl+k / :", label: "palette" },
+  { key: "shift+p", label: "palette" },
   { key: "tab", label: "focus" },
   { key: "q", label: "quit" }
 ];

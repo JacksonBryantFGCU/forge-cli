@@ -73,10 +73,10 @@ export function OnboardingScreen(): React.ReactElement {
             <StepLine
               keyHint="3"
               label="Browse recipes"
-              detail="install bundled defaults via the command palette (ctrl+k)"
+              detail="install bundled defaults via the command palette (shift+p)"
             />
             <StepLine
-              keyHint="ctrl+k"
+              keyHint="shift+p"
               label="Open the command palette"
               detail="navigate, run actions, or init defaults from one menu"
             />
@@ -104,7 +104,7 @@ export function OnboardingScreen(): React.ReactElement {
 
           <Box marginTop={1}>
             <Text color={theme.textMuted}>
-              Press 1–6 to enter a screen, ctrl+k for the action palette, ? for
+              Press 1–6 to enter a screen, shift+p for the action palette, ? for
               help, q to quit.
             </Text>
           </Box>

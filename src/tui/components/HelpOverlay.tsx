@@ -12,8 +12,7 @@ const GLOBAL_GROUP: HelpGroup = {
   title: "Global",
   items: [
     ["?", "toggle this help"],
-    ["ctrl+k", "open command palette"],
-    [":", "open command palette (vim-style)"],
+    ["shift+p", "open command palette"],
     ["esc", "close overlay / back"],
     ["q", "quit"],
   ],
@@ -94,7 +93,7 @@ const SCREEN_KEYS: Record<RouteKey, HelpGroup> = {
     title: "Welcome",
     items: [
       ["1-6", "enter a screen"],
-      ["ctrl+k / :", "open command palette"],
+      ["shift+p", "open command palette"],
       ["?", "toggle this help"],
       ["q", "quit"],
     ],

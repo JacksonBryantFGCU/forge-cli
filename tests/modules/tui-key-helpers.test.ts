@@ -5,54 +5,46 @@ import {
 } from "../../src/tui/key-helpers.js";
 
 const noMod: InkKeyShape = { ctrl: false, meta: false, shift: false };
+const shift: InkKeyShape = { ctrl: false, meta: false, shift: true };
 const ctrl: InkKeyShape = { ctrl: true, meta: false, shift: false };
-const meta: InkKeyShape = { ctrl: false, meta: true, shift: false };
 
 describe("isPaletteShortcut", () => {
-  it("returns true for Ctrl+K (canonical Ink shape)", () => {
-    expect(isPaletteShortcut("k", ctrl)).toBe(true);
-    expect(isPaletteShortcut("K", ctrl)).toBe(true);
+  it("returns true for the literal 'P' character", () => {
+    // Ink reports Shift+P as input === "P" on most terminals, regardless
+    // of whether `key.shift` is also reported.
+    expect(isPaletteShortcut("P", noMod)).toBe(true);
+    expect(isPaletteShortcut("P", shift)).toBe(true);
   });
 
-  it("returns true for Ctrl+<blank> — Windows-terminal fallback", () => {
-    // Some Windows Terminal / PowerShell setups deliver ctrl + letter with
-    // `key.ctrl === true` but a blank `input`.
-    expect(isPaletteShortcut("", ctrl)).toBe(true);
+  it("returns true for 'p' when shift is held", () => {
+    // Defensive: a terminal that emits 'p' with key.shift=true still
+    // counts as Shift+P.
+    expect(isPaletteShortcut("p", shift)).toBe(true);
   });
 
-  it("returns true for the raw VT control character", () => {
-    expect(isPaletteShortcut("\v", noMod)).toBe(true);
+  it("returns false for plain lowercase 'p'", () => {
+    // Lowercase 'p' is reserved for screens that bind it (preview /
+    // show config path).
+    expect(isPaletteShortcut("p", noMod)).toBe(false);
   });
 
-  it("returns true for ':' without modifiers (vim-style alternate)", () => {
-    expect(isPaletteShortcut(":", noMod)).toBe(true);
-  });
-
-  it("returns false for ':' with ctrl held", () => {
-    expect(isPaletteShortcut(":", ctrl)).toBe(false);
-  });
-
-  it("returns false for ':' with meta held", () => {
-    expect(isPaletteShortcut(":", meta)).toBe(false);
-  });
-
-  it("returns false for a plain 'k' keystroke", () => {
-    expect(isPaletteShortcut("k", noMod)).toBe(false);
+  it("returns false when ctrl or meta is held", () => {
+    expect(isPaletteShortcut("P", ctrl)).toBe(false);
+    expect(isPaletteShortcut("P", { ctrl: false, meta: true, shift: false })).toBe(
+      false,
+    );
   });
 
   it("returns false for unrelated characters", () => {
     expect(isPaletteShortcut("a", noMod)).toBe(false);
     expect(isPaletteShortcut("1", noMod)).toBe(false);
     expect(isPaletteShortcut("?", noMod)).toBe(false);
-  });
-
-  it("returns false for a blank input without ctrl", () => {
+    expect(isPaletteShortcut(":", noMod)).toBe(false);
     expect(isPaletteShortcut("", noMod)).toBe(false);
   });
 
-  it("returns true for Ctrl+K even if shift is also held", () => {
-    expect(
-      isPaletteShortcut("K", { ctrl: true, meta: false, shift: true }),
-    ).toBe(true);
+  it("returns false for Ctrl+K (replaced by Shift+P)", () => {
+    expect(isPaletteShortcut("k", ctrl)).toBe(false);
+    expect(isPaletteShortcut("K", ctrl)).toBe(false);
   });
 });

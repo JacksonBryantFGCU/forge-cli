@@ -18,6 +18,8 @@ export default defineConfig({
     "src/commands/config/index.ts",
     "src/commands/template/index.ts",
     "src/commands/tui/index.ts",
+    "src/commands/git/push.ts",
+    "src/commands/git/commit.ts",
   ],
   format: ["esm"],
   target: "node20",

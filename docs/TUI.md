@@ -30,22 +30,25 @@ next steps. Any key dismisses it.
 
 Two overlays:
 
-- **Command palette** — `Ctrl+K` opens a fuzzy-filter list of every action
-  (navigate, run doctor, init default recipes, show help, quit).
+- **Command palette** — `Shift+P` opens a fuzzy-filter list of every action
+  (navigate, run doctor, init default recipes, show help, quit). Shift+P
+  is used instead of Ctrl+K because many terminals (Windows Terminal,
+  VS Code's integrated terminal, several shells) bind Ctrl+K to their
+  own actions.
 - **Help** — `?` shows global + screen-specific keybindings.
 
 ## Keybindings
 
 ### Global
 
-| Key            | Action                                       |
-| -------------- | -------------------------------------------- |
-| `1`–`6`        | Jump to numbered screen                      |
-| `Ctrl+K` / `:` | Open command palette (`:` is a vim-style alternate for terminals that intercept Ctrl+K) |
-| `?`            | Toggle help overlay                          |
-| `Esc`          | Close overlay / clear filter / back          |
-| `Tab`          | Cycle pane focus indicator                   |
-| `q`            | Quit                                         |
+| Key      | Action                                       |
+| -------- | -------------------------------------------- |
+| `1`–`6`  | Jump to numbered screen                      |
+| `Shift+P`| Open command palette                         |
+| `?`      | Toggle help overlay                          |
+| `Esc`    | Close overlay / clear filter / back          |
+| `Tab`    | Cycle pane focus indicator                   |
+| `q`      | Quit                                         |
 
 ### Lists (every screen)
 

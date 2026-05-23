@@ -88,8 +88,7 @@ launch reports, and config editor.
 forge tui
 ```
 
-Six numbered tabs (`1`–`6`), `?` for keyboard help, `Ctrl+K` (or `:` —
-a vim-style alternate for terminals that intercept Ctrl+K) for a
+Six numbered tabs (`1`–`6`), `?` for keyboard help, `Shift+P` for a
 fuzzy-filter command palette, `q` to quit. Recommended terminal size is
 **100×30 or larger** — below that, a yellow warning banner appears and
 panes may truncate, but the TUI stays usable. First-time users land on
